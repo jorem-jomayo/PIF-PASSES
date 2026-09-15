@@ -51,67 +51,17 @@
             animation-timing-function: cubic-bezier(.6, 0, .4, 1);
         }
 
-        #circle-small {
-            width: 300px;
-            height: 300px;
-            top: 200px;
-            left: -150px;
-            opacity: 0.4;
-            animation-delay: 0s;
-        }
+        #circle-small { width: 300px; height: 300px; top: 200px; left: -150px; opacity: 0.4; animation-delay: 0s; }
+        #circle-medium { width: 600px; height: 600px; top: 50px; left: -300px; opacity: 0.3; animation-delay: 0.3s; }
+        #circle-large { width: 900px; height: 900px; top: -100px; left: -450px; opacity: 0.2; animation-delay: 0.6s; }
+        #circle-xlarge { width: 1200px; height: 1200px; top: -250px; left: -600px; opacity: 0.1; animation-delay: 0.9s; }
+        #circle-xxlarge { width: 1500px; height: 1500px; top: -400px; left: -750px; opacity: 0.05; animation-delay: 1.2s; }
 
-        #circle-medium {
-            width: 600px;
-            height: 600px;
-            top: 50px;
-            left: -300px;
-            opacity: 0.3;
-            animation-delay: 0.3s;
-        }
-
-        #circle-large {
-            width: 900px;
-            height: 900px;
-            top: -100px;
-            left: -450px;
-            opacity: 0.2;
-            animation-delay: 0.6s;
-        }
-
-        #circle-xlarge {
-            width: 1200px;
-            height: 1200px;
-            top: -250px;
-            left: -600px;
-            opacity: 0.1;
-            animation-delay: 0.9s;
-        }
-
-        #circle-xxlarge {
-            width: 1500px;
-            height: 1500px;
-            top: -400px;
-            left: -750px;
-            opacity: 0.05;
-            animation-delay: 1.2s;
-        }
-
-        @-webkit-keyframes circle-scale {
-            0% { -webkit-transform: scale(1.0); }
-            100% { -webkit-transform: scale(1.1); }
-        }
-
-        @keyframes circle-scale {
-            0% { transform: scale(1.0); }
-            100% { transform: scale(1.1); }
-        }
+        @-webkit-keyframes circle-scale { 0% { -webkit-transform: scale(1.0); } 100% { -webkit-transform: scale(1.1); } }
+        @keyframes circle-scale { 0% { transform: scale(1.0); } 100% { transform: scale(1.1); } }
 
         /* ─── DASHBOARD STYLES ─── */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
@@ -122,11 +72,7 @@
             z-index: 1;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-        }
+        .container { max-width: 1200px; margin: 0 auto; position: relative; }
 
         /* ─── HEADER ─── */
         .header {
@@ -145,12 +91,7 @@
             gap: 8px;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
         .header-badge {
             background: #0b2b4a;
@@ -164,11 +105,7 @@
             gap: 6px;
             white-space: nowrap;
         }
-
-        .header-badge i {
-            color: #7ab7ff;
-            font-size: 0.8rem;
-        }
+        .header-badge i { color: #7ab7ff; font-size: 0.8rem; }
 
         .year-badge {
             background: rgba(233, 239, 246, 0.9);
@@ -200,11 +137,8 @@
             min-width: 110px;
         }
 
-        .month-select:focus {
-            outline: none;
-            border-color: #0b2b4a;
-            box-shadow: 0 0 0 3px rgba(11, 43, 74, 0.15);
-        }
+        .month-select:focus { outline: none; border-color: #0b2b4a; box-shadow: 0 0 0 3px rgba(11, 43, 74, 0.15); }
+        .month-select:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .info-btn {
             background: rgba(11, 43, 74, 0.08);
@@ -220,18 +154,9 @@
             transition: 0.2s;
             font-size: 0.8rem;
         }
+        .info-btn:hover { background: rgba(11, 43, 74, 0.2); transform: scale(1.05); }
 
-        .info-btn:hover {
-            background: rgba(11, 43, 74, 0.2);
-            transform: scale(1.05);
-        }
-
-        .header-right {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
         .info-badge {
             background: rgba(219, 234, 254, 0.9);
@@ -247,13 +172,7 @@
         }
 
         /* ─── ACTION BAR ─── */
-        .action-bar {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
+        .action-bar { display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex-wrap: wrap; }
 
         .btn {
             background: white;
@@ -271,29 +190,11 @@
             font-family: inherit;
             white-space: nowrap;
         }
-
-        .btn-primary {
-            background: #0b2b4a;
-            border-color: #0b2b4a;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1a3d62;
-        }
-
-        .btn-outline:hover {
-            background: #eef4fa;
-        }
-
-        .btn-success {
-            background: #0d7c3f;
-            border-color: #0d7c3f;
-            color: white;
-        }
-        .btn-success:hover {
-            background: #0f9a4e;
-        }
+        .btn-primary { background: #0b2b4a; border-color: #0b2b4a; color: white; }
+        .btn-primary:hover { background: #1a3d62; }
+        .btn-outline:hover { background: #eef4fa; }
+        .btn-success { background: #0d7c3f; border-color: #0d7c3f; color: white; }
+        .btn-success:hover { background: #0f9a4e; }
 
         .alert {
             padding: 4px 12px;
@@ -305,15 +206,10 @@
             width: 100%;
             margin-top: 4px;
         }
-
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         /* ─── DASHBOARD CARD ─── */
-        .dashboard-card-wrapper {
-            margin-bottom: 16px;
-        }
+        .dashboard-card-wrapper { margin-bottom: 16px; }
 
         .dashboard-card {
             background: rgba(255, 255, 255, 0.92);
@@ -370,10 +266,7 @@
             border: 1px solid rgba(230, 237, 246, 0.6);
         }
 
-        .dashboard-card .card-details thead {
-            background: rgba(233, 239, 246, 0.9);
-        }
-
+        .dashboard-card .card-details thead { background: rgba(233, 239, 246, 0.9); }
         .dashboard-card .card-details thead th {
             text-align: left;
             padding: 10px 14px;
@@ -384,50 +277,57 @@
             color: #3a506e;
             border-bottom: 2px solid #d0d9e6;
         }
-
-        .dashboard-card .card-details thead th:not(:first-child) {
-            text-align: right;
-        }
-
+        .dashboard-card .card-details thead th:not(:first-child) { text-align: right; }
         .dashboard-card .card-details tbody td {
             padding: 8px 14px;
             border-bottom: 1px solid #edf2f8;
             color: #1a2b44;
         }
+        .dashboard-card .card-details tbody td:not(:first-child) { text-align: right; font-weight: 500; }
+        .dashboard-card .card-details tbody tr:hover { background: #f7faff; }
+        .dashboard-card .card-details tbody tr:last-child td { border-bottom: none; }
+        .dashboard-card .card-details .total-row { background: rgba(242, 247, 253, 0.9); font-weight: 700; }
+        .dashboard-card .card-details .total-row td { border-top: 2px solid #c8d6e8; padding: 10px 14px; font-weight: 700; }
+        .dashboard-card .card-details .total-row td:not(:first-child) { text-align: right; }
+        .dashboard-card .card-details .empty-msg { padding: 20px; text-align: center; color: #8a9eb8; font-size: 0.85rem; }
 
-        .dashboard-card .card-details tbody td:not(:first-child) {
+        /* ─── READING TABLE SPECIFIC ─── */
+        .reading-table {
+            min-width: 100% !important;
+            white-space: nowrap;
+        }
+        .reading-table th, .reading-table td {
+            padding: 8px 12px !important;
             text-align: right;
-            font-weight: 500;
+            border-right: 1px solid #edf2f8;
         }
-
-        .dashboard-card .card-details tbody tr:hover {
-            background: #f7faff;
+        .reading-table th:first-child, .reading-table td:first-child {
+            text-align: left;
+            position: sticky;
+            left: 0;
+            background: #fff;
+            z-index: 2;
+            border-right: 2px solid #d0d9e6;
         }
-
-        .dashboard-card .card-details tbody tr:last-child td {
-            border-bottom: none;
+        .reading-table thead th {
+            position: sticky;
+            top: 0;
+            background: #e9eff6 !important;
+            z-index: 10;
         }
-
-        .dashboard-card .card-details .total-row {
-            background: rgba(242, 247, 253, 0.9);
+        .reading-table thead th:first-child {
+            z-index: 11;
+        }
+        .reading-table tfoot tr {
+            background: #f2f7fd;
             font-weight: 700;
         }
-
-        .dashboard-card .card-details .total-row td {
+        .reading-table tfoot td {
             border-top: 2px solid #c8d6e8;
-            padding: 10px 14px;
-            font-weight: 700;
+            background: #f2f7fd;
         }
-
-        .dashboard-card .card-details .total-row td:not(:first-child) {
-            text-align: right;
-        }
-
-        .dashboard-card .card-details .empty-msg {
-            padding: 20px;
-            text-align: center;
-            color: #8a9eb8;
-            font-size: 0.85rem;
+        .reading-table tfoot td:first-child {
+            z-index: 3;
         }
 
         .placeholder-card {
@@ -441,223 +341,63 @@
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .placeholder-card i {
-            font-size: 2.5rem;
-            display: block;
-            margin-bottom: 12px;
-            color: rgba(255, 255, 255, 0.6);
-        }
+        .placeholder-card i { font-size: 2.5rem; display: block; margin-bottom: 12px; color: rgba(255, 255, 255, 0.6); }
 
         /* ─── TOAST NOTIFICATION ─── */
         .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(11, 43, 74, 0.95);
-            backdrop-filter: blur(8px);
-            color: white;
-            padding: 10px 24px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            pointer-events: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            max-width: 90%;
-            text-align: center;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(11, 43, 74, 0.95); backdrop-filter: blur(8px);
+            color: white; padding: 10px 24px; border-radius: 12px;
+            font-size: 0.8rem; font-weight: 500; z-index: 1000;
+            opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 90%; text-align: center;
         }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast i {
-            margin-right: 8px;
-            color: #7ab7ff;
-        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast i { margin-right: 8px; color: #7ab7ff; }
 
         /* ─── INFO MODAL ─── */
         .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px); z-index: 2000;
+            display: flex; align-items: center; justify-content: center; padding: 20px;
         }
-
-        .modal.hidden {
-            display: none;
-        }
-
+        .modal.hidden { display: none; }
         .modal-content {
-            background: white;
-            border-radius: 16px;
-            max-width: 500px;
-            width: 100%;
-            padding: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: white; border-radius: 16px; max-width: 500px; width: 100%;
+            padding: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: modalFadeIn 0.3s ease;
         }
-
-        @keyframes modalFadeIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #eef4fa;
-        }
-
-        .modal-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #0b2b4a;
-        }
-
-        .modal-title i {
-            color: #2a6b9e;
-            margin-right: 8px;
-        }
-
-        .modal-close {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #8a9eb8;
-            transition: color 0.2s;
-            line-height: 1;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .modal-close:hover {
-            color: #1a2639;
-        }
-
-        .modal-body p {
-            font-size: 0.9rem;
-            color: #1a2b44;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f4f9;
-        }
-
-        .modal-body p:last-child {
-            border-bottom: none;
-        }
-
-        .modal-body .highlight {
-            background: rgba(11, 43, 74, 0.06);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-            color: #0b2b4a;
-        }
+        @keyframes modalFadeIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #eef4fa; }
+        .modal-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; }
+        .modal-title i { color: #2a6b9e; margin-right: 8px; }
+        .modal-close { font-size: 1.5rem; cursor: pointer; color: #8a9eb8; transition: color 0.2s; line-height: 1; background: none; border: none; font-family: inherit; }
+        .modal-close:hover { color: #1a2639; }
+        .modal-body p { font-size: 0.9rem; color: #1a2b44; padding: 8px 0; border-bottom: 1px solid #f0f4f9; }
+        .modal-body p:last-child { border-bottom: none; }
+        .modal-body .highlight { background: rgba(11, 43, 74, 0.06); padding: 2px 8px; border-radius: 4px; font-weight: 600; color: #0b2b4a; }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 600px) {
-            body {
-                padding: 12px 8px;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 10px 12px;
-                gap: 6px;
-            }
-
-            .header-left {
-                flex-wrap: wrap;
-                justify-content: flex-start;
-            }
-
-            .header-right {
-                justify-content: flex-start;
-            }
-
-            .header-badge {
-                font-size: 0.85rem;
-                padding: 3px 10px;
-            }
-
-            .month-select {
-                font-size: 0.7rem;
-                min-width: 100px;
-                padding: 3px 12px;
-                padding-right: 26px;
-            }
-
-            .action-bar {
-                justify-content: flex-start;
-                width: 100%;
-            }
-
-            .btn {
-                font-size: 0.55rem;
-                padding: 3px 8px;
-            }
-
-            .dashboard-card {
-                padding: 12px 14px;
-            }
-            .dashboard-card .month-name {
-                font-size: 1.1rem;
-            }
-            .dashboard-card .card-details table {
-                font-size: 0.7rem;
-            }
-            .dashboard-card .card-details thead th,
-            .dashboard-card .card-details tbody td {
-                padding: 5px 6px;
-            }
-
-            #bg-container-inside {
-                min-width: 100%;
-            }
-
-            .bg-circle {
-                display: none;
-            }
-            #circle-small,
-            #circle-medium {
-                display: block;
-            }
-
-            .toast {
-                font-size: 0.7rem;
-                padding: 8px 16px;
-                bottom: 20px;
-            }
-
-            .modal-content {
-                padding: 18px;
-                margin: 10px;
-            }
-        }
-
-        @media (min-width: 601px) and (max-width: 900px) {
-            .container {
-                max-width: 100%;
-                padding: 0 10px;
-            }
+            body { padding: 12px 8px; }
+            .header { flex-direction: column; align-items: stretch; padding: 10px 12px; gap: 6px; }
+            .header-left { flex-wrap: wrap; justify-content: flex-start; }
+            .header-right { justify-content: flex-start; }
+            .header-badge { font-size: 0.85rem; padding: 3px 10px; }
+            .month-select { font-size: 0.7rem; min-width: 100px; padding: 3px 12px; padding-right: 26px; }
+            .action-bar { justify-content: flex-start; width: 100%; }
+            .btn { font-size: 0.55rem; padding: 3px 8px; }
+            .dashboard-card { padding: 12px 14px; }
+            .dashboard-card .month-name { font-size: 1.1rem; }
+            .dashboard-card .card-details table { font-size: 0.7rem; }
+            .dashboard-card .card-details thead th, .dashboard-card .card-details tbody td { padding: 5px 6px; }
+            #bg-container-inside { min-width: 100%; }
+            .bg-circle { display: none; }
+            #circle-small, #circle-medium { display: block; }
+            .toast { font-size: 0.7rem; padding: 8px 16px; bottom: 20px; }
+            .modal-content { padding: 18px; margin: 10px; }
         }
     </style>
 </head>
@@ -716,6 +456,7 @@
                     <button class="btn btn-primary" id="loadBtn"><i class="fas fa-folder-open"></i> Browse</button>
                     <button class="btn btn-success" id="downloadBtn" title="Download current month Excel file"><i class="fas fa-download"></i> Download</button>
                     <button class="btn btn-primary" id="screenshotBtn" title="Save dashboard as image"><i class="fas fa-camera"></i> Screenshot</button>
+                    <button class="btn btn-outline" id="toggleViewBtn" title="Switch to Reading Table"><i class="fas fa-table"></i> Reading Table</button>
                     <button class="btn btn-outline" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
                 </div>
             </div>
@@ -738,12 +479,14 @@
         // ─── Global data store ────────────────────────────────────────────────
         const monthData = {};
         let activeMonth = null;
+        let currentView = 'monthly'; // 'monthly' or 'reading'
 
         // ─── DOM refs ──────────────────────────────────────────────────────────
         const loadBtn = document.getElementById('loadBtn');
         const resetBtn = document.getElementById('resetBtn');
         const downloadBtn = document.getElementById('downloadBtn');
         const screenshotBtn = document.getElementById('screenshotBtn');
+        const toggleViewBtn = document.getElementById('toggleViewBtn');
         const infoBtn = document.getElementById('infoBtn');
         const infoModal = document.getElementById('infoModal');
         const closeInfoModal = document.getElementById('closeInfoModal');
@@ -763,35 +506,17 @@
             toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
             toast.className = 'toast show';
             clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.className = 'toast';
-            }, 3500);
+            toastTimeout = setTimeout(() => { toast.className = 'toast'; }, 3500);
         }
 
         // ─── Info Modal ──────────────────────────────────────────────────────
-        infoBtn.addEventListener('click', () => {
-            infoModal.classList.remove('hidden');
-        });
-
-        closeInfoModal.addEventListener('click', () => {
-            infoModal.classList.add('hidden');
-        });
-
-        infoModal.addEventListener('click', (e) => {
-            if (e.target === infoModal) {
-                infoModal.classList.add('hidden');
-            }
-        });
+        infoBtn.addEventListener('click', () => { infoModal.classList.remove('hidden'); });
+        closeInfoModal.addEventListener('click', () => { infoModal.classList.add('hidden'); });
+        infoModal.addEventListener('click', (e) => { if (e.target === infoModal) infoModal.classList.add('hidden'); });
 
         // ─── Helpers ──────────────────────────────────────────────────────────
-        function showError(text) {
-            errorMsg.textContent = text;
-            errorMsg.classList.remove('hidden');
-        }
-
-        function hideError() {
-            errorMsg.classList.add('hidden');
-        }
+        function showError(text) { errorMsg.textContent = text; errorMsg.classList.remove('hidden'); }
+        function hideError() { errorMsg.classList.add('hidden'); }
 
         function normaliseMonth(name) {
             return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
@@ -803,9 +528,7 @@
                 'july', 'august', 'september', 'october', 'november', 'december'
             ];
             const lower = name.toLowerCase();
-            for (const m of months) {
-                if (lower.includes(m)) return normaliseMonth(m);
-            }
+            for (const m of months) { if (lower.includes(m)) return normaliseMonth(m); }
             return null;
         }
 
@@ -816,11 +539,7 @@
             return months.indexOf(month) + 1;
         }
 
-        // ─── Get current month ───────────────────────────────────────────────
-        function getCurrentMonthIndex() {
-            return new Date().getMonth();
-        }
-
+        function getCurrentMonthIndex() { return new Date().getMonth(); }
         function getMonthNameFromIndex(index) {
             const months = ['January', 'February', 'March', 'April', 'May', 'June',
                 'July', 'August', 'September', 'October', 'November', 'December'
@@ -830,31 +549,25 @@
 
         // ─── Update Header Title ─────────────────────────────────────────────
         function updateHeaderTitle(month) {
-            if (month && monthData[month]) {
+            if (currentView === 'reading') {
+                headerMonthTitle.textContent = 'READING TABLE';
+            } else if (month && monthData[month]) {
                 headerMonthTitle.textContent = month.toUpperCase();
             } else {
                 headerMonthTitle.textContent = 'PIF PASSES';
             }
         }
 
-        // ─── Render Dashboard Card ──────────────────────────────────────────
+        // ─── Render Monthly Dashboard Card ──────────────────────────────────────────
         function renderDashboardCard(month) {
             const data = monthData[month];
-            if (!data) {
-                return `
-                        <div class="placeholder-card">
-                            <i class="fas fa-file-excel"></i>
-                            <p>No data available for this month.</p>
-                        </div>
-                    `;
-            }
+            if (!data) return `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>No data available for this month.</p></div>`;
 
             const { overallMap, uniqMap } = data;
             const placements = new Set([...overallMap.keys(), ...uniqMap.keys()]);
             const sorted = Array.from(placements).sort();
 
-            let totalOverallSum = 0,
-                totalUniqSum = 0;
+            let totalOverallSum = 0, totalUniqSum = 0;
             for (const p of sorted) {
                 totalOverallSum += overallMap.get(p) || 0;
                 totalUniqSum += uniqMap.get(p) || 0;
@@ -869,56 +582,120 @@
                     const overall = overallMap.get(p) || 0;
                     const uniq = uniqMap.get(p) || 0;
                     const passes = uniq > 0 ? overall / uniq : 0;
-                    tableRows += `
-                            <tr>
-                                <td>${p}</td>
-                                <td>${overall.toLocaleString()}</td>
-                                <td>${uniq.toLocaleString()}</td>
-                                <td>${passes.toFixed(2)}</td>
-                            </tr>
-                        `;
+                    tableRows += `<tr><td>${p}</td><td>${overall.toLocaleString()}</td><td>${uniq.toLocaleString()}</td><td>${passes.toFixed(2)}</td></tr>`;
                 }
-                tableRows += `
-                        <tr class="total-row">
-                            <td><strong>TOTAL</strong></td>
-                            <td>${totalOverallSum.toLocaleString()}</td>
-                            <td>${totalUniqSum.toLocaleString()}</td>
-                            <td>${totalPassesVal.toFixed(2)}</td>
-                        </tr>
-                    `;
+                tableRows += `<tr class="total-row"><td><strong>TOTAL</strong></td><td>${totalOverallSum.toLocaleString()}</td><td>${totalUniqSum.toLocaleString()}</td><td>${totalPassesVal.toFixed(2)}</td></tr>`;
             }
 
             return `
-                    <div class="dashboard-card" id="dashboardCard">
-                        <div class="card-header">
-                            <span class="month-name">
-                                ${month.toUpperCase()}
-                                <span class="month-number">${String(getMonthNumber(month)).padStart(2, '0')}</span>
-                            </span>
-                        </div>
-                        <div class="card-details">
-                            <table>
-                                <thead>
-                                    <tr><th>PLACEMENT</th><th>OVERALL</th><th>UNIQ</th><th>PASSES</th></tr>
-                                </thead>
-                                <tbody>
-                                    ${tableRows}
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="dashboard-card" id="dashboardCard">
+                    <div class="card-header">
+                        <span class="month-name">
+                            ${month.toUpperCase()}
+                            <span class="month-number">${String(getMonthNumber(month)).padStart(2, '0')}</span>
+                        </span>
                     </div>
-                `;
+                    <div class="card-details">
+                        <table>
+                            <thead><tr><th>PLACEMENT</th><th>OVERALL</th><th>UNIQ</th><th>PASSES</th></tr></thead>
+                            <tbody>${tableRows}</tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ─── Render Reading Table (Matrix) ──────────────────────────────────
+        function renderReadingTable() {
+            const months = Object.keys(monthData);
+            if (months.length === 0) {
+                dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>No data available.</p></div>`;
+                return;
+            }
+
+            months.sort((a, b) => getMonthNumber(a) - getMonthNumber(b));
+
+            // Get all unique placements across all loaded months
+            const allPlacements = new Set();
+            months.forEach(m => {
+                const { overallMap, uniqMap } = monthData[m];
+                [...overallMap.keys(), ...uniqMap.keys()].forEach(p => allPlacements.add(p));
+            });
+            const sortedPlacements = Array.from(allPlacements).sort();
+
+            // Build Table Header
+            let thead = '<tr><th>PLACEMENT</th>';
+            months.forEach(m => {
+                thead += `<th>${m.substring(0, 3).toUpperCase()}</th>`;
+            });
+            thead += '<th>OVERALL PASSES</th></tr>';
+
+            // Build Table Body
+            let tbody = '';
+            sortedPlacements.forEach(p => {
+                let row = `<td><strong>${p}</strong></td>`;
+                let placementOverall = 0;
+                let placementUniq = 0;
+
+                months.forEach(m => {
+                    const overall = monthData[m].overallMap.get(p) || 0;
+                    const uniq = monthData[m].uniqMap.get(p) || 0;
+                    placementOverall += overall;
+                    placementUniq += uniq;
+
+                    const passes = uniq > 0 ? (overall / uniq) : 0;
+                    row += `<td>${passes > 0 ? passes.toFixed(2) : '-'}</td>`;
+                });
+
+                const placementPasses = placementUniq > 0 ? (placementOverall / placementUniq) : 0;
+                row += `<td style="font-weight:bold; background: #f7faff;">${placementPasses > 0 ? placementPasses.toFixed(2) : '-'}</td>`;
+                tbody += `<tr>${row}</tr>`;
+            });
+
+            // Build Table Footer (Monthly Totals)
+            let tfoot = '<tr class="total-row"><td><strong>MONTHLY TOTAL</strong></td>';
+            let grandOverall = 0;
+            let grandUniq = 0;
+
+            months.forEach(m => {
+                let monthOverall = 0;
+                let monthUniq = 0;
+                monthData[m].overallMap.forEach(v => monthOverall += v);
+                monthData[m].uniqMap.forEach(v => monthUniq += v);
+                grandOverall += monthOverall;
+                grandUniq += monthUniq;
+
+                const monthPasses = monthUniq > 0 ? (monthOverall / monthUniq) : 0;
+                tfoot += `<td>${monthPasses > 0 ? monthPasses.toFixed(2) : '-'}</td>`;
+            });
+
+            const grandPasses = grandUniq > 0 ? (grandOverall / grandUniq) : 0;
+            tfoot += `<td style="font-weight:bold; background: #e9eff6;">${grandPasses > 0 ? grandPasses.toFixed(2) : '-'}</td></tr>`;
+
+            dashboardContainer.innerHTML = `
+                <div class="dashboard-card" id="dashboardCard">
+                    <div class="card-header">
+                        <span class="month-name">
+                            READING TABLE <span style="font-size:0.8rem; font-weight:normal; color:#6a7e9a; margin-left:10px;">(Passes = OVERALL ÷ UNIQ)</span>
+                        </span>
+                    </div>
+                    <div class="card-details" style="overflow-x: auto;">
+                        <table class="reading-table">
+                            <thead>${thead}</thead>
+                            <tbody>${tbody}</tbody>
+                            <tfoot>${tfoot}</tfoot>
+                        </table>
+                    </div>
+                </div>
+            `;
         }
 
         // ─── Display selected month ─────────────────────────────────────────
         function displayMonth(month) {
+            if (currentView === 'reading') return;
+
             if (!month || !monthData[month]) {
-                dashboardContainer.innerHTML = `
-                        <div class="placeholder-card">
-                            <i class="fas fa-file-excel"></i>
-                            <p>Select a month from the dropdown to view data.</p>
-                        </div>
-                    `;
+                dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>Select a month from the dropdown to view data.</p></div>`;
                 updateHeaderTitle(null);
                 return;
             }
@@ -947,7 +724,8 @@
                 monthSelect.appendChild(option);
             }
 
-            // Auto-select: current month if available, else most recent past month
+            if (currentView === 'reading') return; // Don't auto-select month if in reading view
+
             const currentMonthIndex = getCurrentMonthIndex();
             const currentMonthName = getMonthNameFromIndex(currentMonthIndex);
             let selectedMonth = null;
@@ -957,23 +735,17 @@
             } else {
                 for (let i = currentMonthIndex - 1; i >= 0; i--) {
                     const monthName = getMonthNameFromIndex(i);
-                    if (monthData[monthName]) {
-                        selectedMonth = monthName;
-                        break;
-                    }
+                    if (monthData[monthName]) { selectedMonth = monthName; break; }
                 }
-                if (!selectedMonth && loadedMonths.length > 0) {
-                    selectedMonth = loadedMonths[0];
-                }
+                if (!selectedMonth && loadedMonths.length > 0) selectedMonth = loadedMonths[0];
             }
 
             if (selectedMonth) {
                 monthSelect.value = selectedMonth;
                 displayMonth(selectedMonth);
             } else if (loadedMonths.length > 0) {
-                const firstMonth = loadedMonths[0];
-                monthSelect.value = firstMonth;
-                displayMonth(firstMonth);
+                monthSelect.value = loadedMonths[0];
+                displayMonth(loadedMonths[0]);
             }
         }
 
@@ -991,156 +763,112 @@
                     const allSheetName = sheetNames.find(s => s.toUpperCase() === 'ALL');
                     const uniqSheetName = sheetNames.find(s => s.toUpperCase() === 'UNIQ');
 
-                    if (!allSheetName || !uniqSheetName) {
-                        reject(new Error(`Sheet "ALL" or "UNIQ" missing in ${fileName}`));
-                        return;
-                    }
+                    if (!allSheetName || !uniqSheetName) { reject(new Error(`Sheet "ALL" or "UNIQ" missing in ${fileName}`)); return; }
 
                     const allSheet = workbook.Sheets[allSheetName];
                     const allJson = XLSX.utils.sheet_to_json(allSheet);
-                    if (allJson.length === 0) {
-                        reject(new Error(`Sheet "ALL" is empty in ${fileName}`));
-                        return;
-                    }
+                    if (allJson.length === 0) { reject(new Error(`Sheet "ALL" is empty in ${fileName}`)); return; }
 
                     const uniqSheet = workbook.Sheets[uniqSheetName];
                     const uniqJson = XLSX.utils.sheet_to_json(uniqSheet);
-                    if (uniqJson.length === 0) {
-                        reject(new Error(`Sheet "UNIQ" is empty in ${fileName}`));
-                        return;
-                    }
+                    if (uniqJson.length === 0) { reject(new Error(`Sheet "UNIQ" is empty in ${fileName}`)); return; }
 
                     const allHeader = Object.keys(allJson[0]);
                     const uniqHeader = Object.keys(uniqJson[0]);
                     const placementAllIdx = allHeader.findIndex(h => h.toUpperCase() === 'PLACEMENT');
                     const placementUniqIdx = uniqHeader.findIndex(h => h.toUpperCase() === 'PLACEMENT');
 
-                    if (placementAllIdx === -1 || placementUniqIdx === -1) {
-                        reject(new Error(`Column "PLACEMENT" not found in ${fileName}`));
-                        return;
-                    }
+                    if (placementAllIdx === -1 || placementUniqIdx === -1) { reject(new Error(`Column "PLACEMENT" not found in ${fileName}`)); return; }
 
                     const overallMap = new Map();
                     for (const row of allJson) {
                         const placement = String(row[Object.keys(row)[placementAllIdx]] || '').trim();
-                        if (placement) {
-                            overallMap.set(placement, (overallMap.get(placement) || 0) + 1);
-                        }
+                        if (placement) overallMap.set(placement, (overallMap.get(placement) || 0) + 1);
                     }
 
                     const uniqMap = new Map();
                     for (const row of uniqJson) {
                         const placement = String(row[Object.keys(row)[placementUniqIdx]] || '').trim();
-                        if (placement) {
-                            uniqMap.set(placement, (uniqMap.get(placement) || 0) + 1);
-                        }
+                        if (placement) uniqMap.set(placement, (uniqMap.get(placement) || 0) + 1);
                     }
 
                     let month = guessMonthFromFilename(fileName);
-                    if (!month) {
-                        reject(new Error(`Could not detect month from filename: ${fileName}`));
-                        return;
-                    }
+                    if (!month) { reject(new Error(`Could not detect month from filename: ${fileName}`)); return; }
                     resolve({ month, overallMap, uniqMap });
-                } catch (err) {
-                    reject(err);
-                }
+                } catch (err) { reject(err); }
             });
         }
 
         // ─── Fetch Excel files from the repository ──────────────────────────
         async function fetchExcelFilesFromRepo() {
             hideError();
-
-            const monthNames = [
-                'January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'
-            ];
-
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
             const allPatterns = [];
 
             for (const m of monthNames) allPatterns.push(`${m}.xlsx`);
             for (const m of monthNames) allPatterns.push(`${m.toLowerCase()}.xlsx`);
             for (const m of monthNames) allPatterns.push(`${m.toUpperCase()}.xlsx`);
-
             for (const a of monthAbbr) {
-                allPatterns.push(`${a}.xlsx`);
-                allPatterns.push(`${a.toLowerCase()}.xlsx`);
-                allPatterns.push(`${a.toUpperCase()}.xlsx`);
+                allPatterns.push(`${a}.xlsx`); allPatterns.push(`${a.toLowerCase()}.xlsx`); allPatterns.push(`${a.toUpperCase()}.xlsx`);
             }
-
             for (const m of monthNames) {
-                allPatterns.push(`${m}_data.xlsx`);
-                allPatterns.push(`${m.toUpperCase()}_data.xlsx`);
-                allPatterns.push(`${m.toLowerCase()}_data.xlsx`);
+                allPatterns.push(`${m}_data.xlsx`); allPatterns.push(`${m.toUpperCase()}_data.xlsx`); allPatterns.push(`${m.toLowerCase()}_data.xlsx`);
             }
-
             for (const m of monthNames) {
-                allPatterns.push(`${m} 2026.xlsx`);
-                allPatterns.push(`${m.toUpperCase()} 2026.xlsx`);
+                allPatterns.push(`${m} 2026.xlsx`); allPatterns.push(`${m.toUpperCase()} 2026.xlsx`);
             }
-
             for (const m of monthNames) {
-                allPatterns.push(m);
-                allPatterns.push(m.toUpperCase());
-                allPatterns.push(m.toLowerCase());
+                allPatterns.push(m); allPatterns.push(m.toUpperCase()); allPatterns.push(m.toLowerCase());
             }
 
             const uniquePatterns = [...new Set(allPatterns)];
             let loadedCount = 0;
 
             dashboardContainer.innerHTML = `
-                    <div class="placeholder-card">
-                        <i class="fas fa-spinner fa-pulse"></i>
-                        <p>Loading Excel files from repository...</p>
-                        <span style="font-size:0.7rem; opacity:0.7;">Scanning for months (JANUARY.xlsx, FEBRUARY.xlsx, ...)</span>
-                    </div>
-                `;
+                <div class="placeholder-card">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                    <p>Loading Excel files from repository...</p>
+                    <span style="font-size:0.7rem; opacity:0.7;">Scanning for months (JANUARY.xlsx, FEBRUARY.xlsx, ...)</span>
+                </div>
+            `;
 
             for (const fileName of uniquePatterns) {
                 try {
                     const response = await fetch(fileName);
                     if (!response.ok) continue;
-
                     const fileData = new Uint8Array(await response.arrayBuffer());
                     const result = await processFileData(fileData, fileName);
                     const { month, overallMap, uniqMap } = result;
-
                     if (!monthData[month]) {
                         monthData[month] = { overallMap, uniqMap };
                         loadedCount++;
                         console.log(`✅ Loaded: ${month} from ${fileName}`);
                     }
-                } catch (err) {
-                    continue;
-                }
+                } catch (err) { continue; }
             }
 
             if (loadedCount > 0) {
                 populateDropdown();
+                if (currentView === 'reading') renderReadingTable();
             } else {
                 dashboardContainer.innerHTML = `
-                        <div class="placeholder-card">
-                            <i class="fas fa-file-excel"></i>
-                            <p>No Excel files found in the repository.</p>
-                            <span style="font-size:0.7rem; opacity:0.7;">
-                                Make sure your monthly Excel files (e.g., JANUARY.xlsx, FEBRUARY.xlsx) are in the same folder.<br>
-                                <strong>Supported:</strong> JANUARY.xlsx, January.xlsx, january.xlsx, JAN.xlsx, etc.
-                            </span>
-                        </div>
-                    `;
+                    <div class="placeholder-card">
+                        <i class="fas fa-file-excel"></i>
+                        <p>No Excel files found in the repository.</p>
+                        <span style="font-size:0.7rem; opacity:0.7;">
+                            Make sure your monthly Excel files (e.g., JANUARY.xlsx, FEBRUARY.xlsx) are in the same folder.<br>
+                            <strong>Supported:</strong> JANUARY.xlsx, January.xlsx, january.xlsx, JAN.xlsx, etc.
+                        </span>
+                    </div>
+                `;
                 loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
                 monthSelect.innerHTML = '<option value="">-- No months --</option>';
                 updateHeaderTitle(null);
             }
 
             updateLoadedBadge();
-
-            if (loadedCount === 0) {
-                showError('No Excel files found. Please upload files or use the Browse button.');
-            }
+            if (loadedCount === 0) showError('No Excel files found. Please upload files or use the Browse button.');
         }
 
         // ─── Manual file selection (fallback) ──────────────────────────────
@@ -1173,20 +901,14 @@
                             monthData[month] = { overallMap, uniqMap };
                             loadedCount++;
                         }
-                    } catch (err) {
-                        showError(`Error processing ${file.name}: ${err.message}`);
-                    }
+                    } catch (err) { showError(`Error processing ${file.name}: ${err.message}`); }
                 }
 
                 if (loadedCount > 0) {
                     populateDropdown();
+                    if (currentView === 'reading') renderReadingTable();
                 } else {
-                    dashboardContainer.innerHTML = `
-                            <div class="placeholder-card">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <p>No valid months loaded. Please check file names and content.</p>
-                            </div>
-                        `;
+                    dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-exclamation-triangle"></i><p>No valid months loaded. Please check file names and content.</p></div>`;
                     loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
                     updateHeaderTitle(null);
                 }
@@ -1200,26 +922,15 @@
         // ─── Screenshot function ─────────────────────────────────────────────
         async function takeScreenshot() {
             const card = document.getElementById('dashboardCard');
-            if (!card) {
-                showToast('No dashboard card to capture. Please load data first.', 'error');
-                return;
-            }
+            if (!card) { showToast('No dashboard card to capture. Please load data first.', 'error'); return; }
 
             try {
                 showToast('Capturing screenshot...', 'info');
-                const canvas = await html2canvas(card, {
-                    scale: 2,
-                    backgroundColor: '#ffffff',
-                    allowTaint: true,
-                    useCORS: true,
-                    logging: false,
-                });
-
+                const canvas = await html2canvas(card, { scale: 2, backgroundColor: '#ffffff', allowTaint: true, useCORS: true, logging: false });
                 const link = document.createElement('a');
-                link.download = `PIF_PASSES_${activeMonth || 'DASHBOARD'}.png`;
+                link.download = `PIF_PASSES_${currentView === 'reading' ? 'READING_TABLE' : (activeMonth || 'DASHBOARD')}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-
                 showToast('Screenshot saved successfully!', 'success');
             } catch (err) {
                 console.error('Screenshot error:', err);
@@ -1229,20 +940,14 @@
 
         // ─── Download Excel file ─────────────────────────────────────────────
         function downloadExcelFile() {
-            if (!activeMonth) {
-                showToast('No month selected. Please select a month first.', 'error');
+            if (currentView === 'reading') {
+                showToast('Download is only available in Monthly View.', 'error');
                 return;
             }
+            if (!activeMonth) { showToast('No month selected. Please select a month first.', 'error'); return; }
 
             const monthName = activeMonth;
-            const fileNames = [
-                `${monthName.toUpperCase()}.xlsx`,
-                `${monthName}.xlsx`,
-                `${monthName.toLowerCase()}.xlsx`,
-                `${monthName}_data.xlsx`,
-                `${monthName.toUpperCase()}_data.xlsx`,
-            ];
-
+            const fileNames = [`${monthName.toUpperCase()}.xlsx`, `${monthName}.xlsx`, `${monthName.toLowerCase()}.xlsx`, `${monthName}_data.xlsx`, `${monthName.toUpperCase()}_data.xlsx`];
             const uniqueFileNames = [...new Set(fileNames)];
 
             async function attemptDownload() {
@@ -1258,18 +963,13 @@
                             link.click();
                             document.body.removeChild(link);
                             setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-
                             showToast(`Downloaded ${fileName}`, 'success');
                             return;
                         }
-                    } catch (err) {
-                        // Continue to next filename
-                    }
+                    } catch (err) { }
                 }
-
                 showToast(`Could not find Excel file for ${monthName}. Make sure it's in the repository.`, 'error');
             }
-
             attemptDownload();
         }
 
@@ -1277,17 +977,36 @@
 
         loadBtn.addEventListener('click', manualFileSelect);
 
+        // Toggle View Logic
+        toggleViewBtn.addEventListener('click', () => {
+            currentView = currentView === 'monthly' ? 'reading' : 'monthly';
+            if (currentView === 'reading') {
+                toggleViewBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> Monthly View';
+                toggleViewBtn.classList.remove('btn-outline');
+                toggleViewBtn.classList.add('btn-primary');
+                monthSelect.disabled = true;
+                renderReadingTable();
+                updateHeaderTitle(null);
+            } else {
+                toggleViewBtn.innerHTML = '<i class="fas fa-table"></i> Reading Table';
+                toggleViewBtn.classList.remove('btn-primary');
+                toggleViewBtn.classList.add('btn-outline');
+                monthSelect.disabled = false;
+                if (activeMonth && monthData[activeMonth]) {
+                    displayMonth(activeMonth);
+                } else {
+                    const months = Object.keys(monthData).sort((a,b) => getMonthNumber(a) - getMonthNumber(b));
+                    if (months.length > 0) displayMonth(months[0]);
+                }
+            }
+        });
+
         monthSelect.addEventListener('change', function() {
             const month = this.value;
             if (month && monthData[month]) {
                 displayMonth(month);
             } else {
-                dashboardContainer.innerHTML = `
-                        <div class="placeholder-card">
-                            <i class="fas fa-file-excel"></i>
-                            <p>Select a month from the dropdown to view data.</p>
-                        </div>
-                    `;
+                dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>Select a month from the dropdown to view data.</p></div>`;
                 updateHeaderTitle(null);
             }
         });
@@ -1297,12 +1016,7 @@
             activeMonth = null;
             loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
             hideError();
-            dashboardContainer.innerHTML = `
-                    <div class="placeholder-card">
-                        <i class="fas fa-spinner fa-pulse"></i>
-                        <p>Loading Excel files from repository...</p>
-                    </div>
-                `;
+            dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-spinner fa-pulse"></i><p>Loading Excel files from repository...</p></div>`;
             updateHeaderTitle(null);
             monthSelect.innerHTML = '<option value="">-- Loading --</option>';
 
@@ -1314,12 +1028,12 @@
 
         // ─── Initialise ──────────────────────────────────────────────────────
         dashboardContainer.innerHTML = `
-                <div class="placeholder-card">
-                    <i class="fas fa-spinner fa-pulse"></i>
-                    <p>Loading Excel files from repository...</p>
-                    <span style="font-size:0.7rem; opacity:0.7;">Looking for JANUARY.xlsx, FEBRUARY.xlsx, etc.</span>
-                </div>
-            `;
+            <div class="placeholder-card">
+                <i class="fas fa-spinner fa-pulse"></i>
+                <p>Loading Excel files from repository...</p>
+                <span style="font-size:0.7rem; opacity:0.7;">Looking for JANUARY.xlsx, FEBRUARY.xlsx, etc.</span>
+            </div>
+        `;
         loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
         updateHeaderTitle(null);
         monthSelect.innerHTML = '<option value="">-- Loading --</option>';
