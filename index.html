@@ -456,7 +456,7 @@
                     <button class="btn btn-primary" id="loadBtn"><i class="fas fa-folder-open"></i> Browse</button>
                     <button class="btn btn-success" id="downloadBtn" title="Download current month Excel file"><i class="fas fa-download"></i> Download</button>
                     <button class="btn btn-primary" id="screenshotBtn" title="Save dashboard as image"><i class="fas fa-camera"></i> Screenshot</button>
-                    <button class="btn btn-outline" id="toggleViewBtn" title="Switch to Reading Table"><i class="fas fa-table"></i> Reading Table</button>
+                    <button class="btn btn-outline" id="toggleViewBtn" title="Switch to Overall Passes"><i class="fas fa-table"></i> OVERALL PASSES 2026</button>
                     <button class="btn btn-outline" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
                 </div>
             </div>
@@ -479,7 +479,7 @@
         // ─── Global data store ────────────────────────────────────────────────
         const monthData = {};
         let activeMonth = null;
-        let currentView = 'monthly'; // 'monthly' or 'reading'
+        let currentView = 'monthly'; // 'monthly' or 'overall'
 
         // ─── DOM refs ──────────────────────────────────────────────────────────
         const loadBtn = document.getElementById('loadBtn');
@@ -549,8 +549,8 @@
 
         // ─── Update Header Title ─────────────────────────────────────────────
         function updateHeaderTitle(month) {
-            if (currentView === 'reading') {
-                headerMonthTitle.textContent = 'PIF PASSES 2026'; // Changed title here
+            if (currentView === 'overall') {
+                headerMonthTitle.textContent = 'OVERALL PASSES 2026';
             } else if (month && monthData[month]) {
                 headerMonthTitle.textContent = month.toUpperCase();
             } else {
@@ -605,8 +605,8 @@
             `;
         }
 
-        // ─── Render Reading Table (Matrix) ──────────────────────────────────
-        function renderReadingTable() {
+        // ─── Render Overall Passes Table (Matrix) ──────────────────────────────────
+        function renderOverallPassesTable() {
             const months = Object.keys(monthData);
             if (months.length === 0) {
                 dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>No data available.</p></div>`;
@@ -676,7 +676,7 @@
                 <div class="dashboard-card" id="dashboardCard">
                     <div class="card-header">
                         <span class="month-name">
-                            PIF PASSES 2026 <span style="font-size:0.8rem; font-weight:normal; color:#6a7e9a; margin-left:10px;">(Passes = OVERALL ÷ UNIQ)</span>
+                            OVERALL PASSES 2026 <span style="font-size:0.8rem; font-weight:normal; color:#6a7e9a; margin-left:10px;">(Passes = OVERALL ÷ UNIQ)</span>
                         </span>
                     </div>
                     <div class="card-details" style="overflow-x: auto;">
@@ -692,7 +692,7 @@
 
         // ─── Display selected month ─────────────────────────────────────────
         function displayMonth(month) {
-            if (currentView === 'reading') return;
+            if (currentView === 'overall') return;
 
             if (!month || !monthData[month]) {
                 dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>Select a month from the dropdown to view data.</p></div>`;
@@ -724,7 +724,7 @@
                 monthSelect.appendChild(option);
             }
 
-            if (currentView === 'reading') return; // Don't auto-select month if in reading view
+            if (currentView === 'overall') return; // Don't auto-select month if in overall view
 
             const currentMonthIndex = getCurrentMonthIndex();
             const currentMonthName = getMonthNameFromIndex(currentMonthIndex);
@@ -850,7 +850,7 @@
 
             if (loadedCount > 0) {
                 populateDropdown();
-                if (currentView === 'reading') renderReadingTable();
+                if (currentView === 'overall') renderOverallPassesTable();
             } else {
                 dashboardContainer.innerHTML = `
                     <div class="placeholder-card">
@@ -906,7 +906,7 @@
 
                 if (loadedCount > 0) {
                     populateDropdown();
-                    if (currentView === 'reading') renderReadingTable();
+                    if (currentView === 'overall') renderOverallPassesTable();
                 } else {
                     dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-exclamation-triangle"></i><p>No valid months loaded. Please check file names and content.</p></div>`;
                     loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
@@ -928,7 +928,7 @@
                 showToast('Capturing screenshot...', 'info');
                 const canvas = await html2canvas(card, { scale: 2, backgroundColor: '#ffffff', allowTaint: true, useCORS: true, logging: false });
                 const link = document.createElement('a');
-                link.download = `PIF_PASSES_${currentView === 'reading' ? 'READING_TABLE' : (activeMonth || 'DASHBOARD')}.png`;
+                link.download = `PIF_PASSES_${currentView === 'overall' ? 'OVERALL_PASSES_2026' : (activeMonth || 'DASHBOARD')}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 showToast('Screenshot saved successfully!', 'success');
@@ -940,7 +940,7 @@
 
         // ─── Download Excel file ─────────────────────────────────────────────
         function downloadExcelFile() {
-            if (currentView === 'reading') {
+            if (currentView === 'overall') {
                 showToast('Download is only available in Monthly View.', 'error');
                 return;
             }
@@ -979,16 +979,16 @@
 
         // Toggle View Logic
         toggleViewBtn.addEventListener('click', () => {
-            currentView = currentView === 'monthly' ? 'reading' : 'monthly';
-            if (currentView === 'reading') {
+            currentView = currentView === 'monthly' ? 'overall' : 'monthly';
+            if (currentView === 'overall') {
                 toggleViewBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> Monthly View';
                 toggleViewBtn.classList.remove('btn-outline');
                 toggleViewBtn.classList.add('btn-primary');
                 monthSelect.disabled = true;
-                renderReadingTable();
+                renderOverallPassesTable();
                 updateHeaderTitle(null);
             } else {
-                toggleViewBtn.innerHTML = '<i class="fas fa-table"></i> Reading Table';
+                toggleViewBtn.innerHTML = '<i class="fas fa-table"></i> OVERALL PASSES 2026';
                 toggleViewBtn.classList.remove('btn-primary');
                 toggleViewBtn.classList.add('btn-outline');
                 monthSelect.disabled = false;
