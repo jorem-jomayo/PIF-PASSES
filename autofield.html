@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Autofield Area Passes</title>
+    <!-- SheetJS library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- html2canvas for screenshot -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📍</text></svg>" />
+    
+    <style>
+        #bg-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #00adef;
+            background: linear-gradient(135deg, #00adef 0%, #0076e5 100%);
+            z-index: 0; overflow: hidden;
+        }
+
+        #bg-container-inside {
+            position: relative; width: 100%; height: 100%;
+            min-width: 960px; max-width: 1280px; margin: 0 auto; overflow: visible;
+        }
+
+        .bg-circle {
+            position: absolute; background: #fff; border-radius: 50%;
+            opacity: 0.4;
+            animation: circle-scale 3s ease-in-out infinite alternate;
+            animation-timing-function: cubic-bezier(.6, 0, .4, 1);
+        }
+
+        #circle-small { width: 300px; height: 300px; top: 200px; left: -150px; opacity: 0.4; animation-delay: 0s; }
+        #circle-medium { width: 600px; height: 600px; top: 50px; left: -300px; opacity: 0.3; animation-delay: 0.3s; }
+        #circle-large { width: 900px; height: 900px; top: -100px; left: -450px; opacity: 0.2; animation-delay: 0.6s; }
+        #circle-xlarge { width: 1200px; height: 1200px; top: -250px; left: -600px; opacity: 0.1; animation-delay: 0.9s; }
+        #circle-xxlarge { width: 1500px; height: 1500px; top: -400px; left: -750px; opacity: 0.05; animation-delay: 1.2s; }
+
+        @keyframes circle-scale { 0% { transform: scale(1.0); } 100% { transform: scale(1.1); } }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+            padding: 20px 16px; color: #1a2639; min-height: 100vh;
+            position: relative; z-index: 1;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; position: relative; }
+
+        /* ─── HEADER ─── */
+        .header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            padding: 10px 16px; border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0, 20, 50, 0.08);
+            margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 8px;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+        .header-badge {
+            background: #0b2b4a; color: white; font-weight: 700; font-size: 1rem;
+            padding: 4px 14px; border-radius: 30px;
+            display: flex; align-items: center; gap: 6px; white-space: nowrap;
+        }
+        .header-badge i { color: #7ab7ff; font-size: 0.8rem; }
+
+        .year-badge {
+            background: rgba(233, 239, 246, 0.9); padding: 3px 10px; border-radius: 30px;
+            font-weight: 500; color: #2c405c; font-size: 0.7rem; white-space: nowrap;
+        }
+
+        .month-select {
+            background: rgba(242, 247, 253, 0.9); border: 1px solid #d0d9e6;
+            border-radius: 30px; padding: 4px 14px; font-size: 0.75rem;
+            font-weight: 600; color: #0b2b4a; cursor: pointer;
+            font-family: inherit; appearance: none; -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%230b2b4a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 10px center;
+            padding-right: 30px; min-width: 110px;
+        }
+        .month-select:focus { outline: none; border-color: #0b2b4a; box-shadow: 0 0 0 3px rgba(11, 43, 74, 0.15); }
+        .month-select:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .info-btn {
+            background: rgba(11, 43, 74, 0.08); border: none; border-radius: 50%;
+            width: 28px; height: 28px; display: flex; align-items: center;
+            justify-content: center; color: #0b2b4a; cursor: pointer;
+            transition: 0.2s; font-size: 0.8rem;
+        }
+        .info-btn:hover { background: rgba(11, 43, 74, 0.2); transform: scale(1.05); }
+
+        .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+        .info-badge {
+            background: rgba(219, 234, 254, 0.9); color: #1e3a8a;
+            padding: 2px 8px; border-radius: 30px;
+            font-weight: 500; font-size: 0.6rem;
+            display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+        }
+
+        /* ─── LINK BADGE (back to PLACEMENT) ─── */
+        .link-btn {
+            background: linear-gradient(135deg, #6a3fb5 0%, #4a2a8a 100%);
+            border: none; color: white; padding: 4px 12px; border-radius: 30px;
+            font-weight: 600; font-size: 0.65rem; cursor: pointer;
+            transition: 0.2s; display: inline-flex; align-items: center;
+            gap: 4px; font-family: inherit; white-space: nowrap;
+            text-decoration: none;
+        }
+        .link-btn:hover { background: linear-gradient(135deg, #7a4fc5 0%, #5a3a9a 100%); transform: translateY(-1px); }
+
+        /* ─── ACTION BAR ─── */
+        .action-bar { display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex-wrap: wrap; }
+
+        .btn {
+            background: white; border: 1px solid #d0d9e6;
+            padding: 4px 12px; border-radius: 30px;
+            font-weight: 600; font-size: 0.65rem;
+            color: #1a2b44; cursor: pointer; transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 4px;
+            font-family: inherit; white-space: nowrap;
+        }
+        .btn-primary { background: #0b2b4a; border-color: #0b2b4a; color: white; }
+        .btn-primary:hover { background: #1a3d62; }
+        .btn-outline:hover { background: #eef4fa; }
+        .btn-success { background: #0d7c3f; border-color: #0d7c3f; color: white; }
+        .btn-success:hover { background: #0f9a4e; }
+
+        .alert {
+            padding: 4px 12px; border-radius: 8px;
+            background: #fef3c7; color: #92400e;
+            border-left: 3px solid #f59e0b;
+            font-size: 0.7rem; width: 100%; margin-top: 4px;
+        }
+        .hidden { display: none !important; }
+
+        /* ─── DASHBOARD CARD ─── */
+        .dashboard-card-wrapper { margin-bottom: 16px; }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 16px; padding: 16px 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            display: flex; flex-direction: column;
+        }
+
+        .dashboard-card .card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 12px; width: 100%; padding-bottom: 12px;
+            border-bottom: 2px solid rgba(11, 43, 74, 0.08); flex-wrap: wrap;
+        }
+
+        .dashboard-card .month-name {
+            font-weight: 700; font-size: 1.4rem; color: #0b2b4a;
+            letter-spacing: 0.5px;
+        }
+
+        .dashboard-card .month-number {
+            font-size: 0.7rem; font-weight: 600; color: #b0c4db;
+            background: #eef4fa; padding: 2px 10px;
+            border-radius: 20px; margin-left: 6px;
+        }
+
+        .dashboard-card .card-details {
+            margin-top: 16px; width: 100%; overflow-x: auto;
+        }
+
+        .dashboard-card .card-details table {
+            width: 100%; border-collapse: collapse; font-size: 0.85rem;
+            border-radius: 8px; overflow: hidden;
+            border: 1px solid rgba(230, 237, 246, 0.6);
+        }
+
+        .dashboard-card .card-details thead { background: rgba(233, 239, 246, 0.9); }
+        .dashboard-card .card-details thead th {
+            text-align: left; padding: 10px 14px;
+            font-weight: 700; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            color: #3a506e; border-bottom: 2px solid #d0d9e6;
+        }
+        .dashboard-card .card-details thead th:not(:first-child) { text-align: right; }
+        .dashboard-card .card-details tbody td {
+            padding: 8px 14px; border-bottom: 1px solid #edf2f8; color: #1a2b44;
+        }
+        .dashboard-card .card-details tbody td:not(:first-child) { text-align: right; font-weight: 500; }
+        .dashboard-card .card-details tbody tr:hover { background: #f7faff; }
+        .dashboard-card .card-details tbody tr:last-child td { border-bottom: none; }
+        .dashboard-card .card-details .total-row { background: rgba(242, 247, 253, 0.9); font-weight: 700; }
+        .dashboard-card .card-details .total-row td { border-top: 2px solid #c8d6e8; padding: 10px 14px; font-weight: 700; }
+        .dashboard-card .card-details .total-row td:not(:first-child) { text-align: right; }
+        .dashboard-card .card-details .empty-msg { padding: 20px; text-align: center; color: #8a9eb8; font-size: 0.85rem; }
+
+        /* ─── MATRIX TABLE SPECIFIC ─── */
+        .matrix-table { min-width: 100% !important; white-space: nowrap; }
+        .matrix-table th, .matrix-table td {
+            padding: 8px 12px !important; text-align: right;
+            border-right: 1px solid #edf2f8;
+        }
+        .matrix-table th:first-child, .matrix-table td:first-child {
+            text-align: left; position: sticky; left: 0;
+            background: #fff; z-index: 2; border-right: 2px solid #d0d9e6;
+        }
+        .matrix-table thead th {
+            position: sticky; top: 0;
+            background: #e9eff6 !important; z-index: 10;
+        }
+        .matrix-table thead th:first-child { z-index: 11; }
+        .matrix-table tfoot tr { background: #f2f7fd; font-weight: 700; }
+        .matrix-table tfoot td {
+            border-top: 2px solid #c8d6e8; background: #f2f7fd;
+        }
+        .matrix-table tfoot td:first-child { z-index: 3; }
+
+        .placeholder-card {
+            text-align: center; padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .placeholder-card i { font-size: 2.5rem; display: block; margin-bottom: 12px; color: rgba(255, 255, 255, 0.6); }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(11, 43, 74, 0.95); backdrop-filter: blur(8px);
+            color: white; padding: 10px 24px; border-radius: 12px;
+            font-size: 0.8rem; font-weight: 500; z-index: 1000;
+            opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 90%; text-align: center;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast i { margin-right: 8px; color: #7ab7ff; }
+
+        /* ─── INFO MODAL ─── */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px); z-index: 2000;
+            display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal.hidden { display: none; }
+        .modal-content {
+            background: white; border-radius: 16px; max-width: 500px; width: 100%;
+            padding: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #eef4fa; }
+        .modal-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; }
+        .modal-title i { color: #2a6b9e; margin-right: 8px; }
+        .modal-close { font-size: 1.5rem; cursor: pointer; color: #8a9eb8; transition: color 0.2s; line-height: 1; background: none; border: none; font-family: inherit; }
+        .modal-close:hover { color: #1a2639; }
+        .modal-body p { font-size: 0.9rem; color: #1a2b44; padding: 8px 0; border-bottom: 1px solid #f0f4f9; }
+        .modal-body p:last-child { border-bottom: none; }
+        .modal-body .highlight { background: rgba(11, 43, 74, 0.06); padding: 2px 8px; border-radius: 4px; font-weight: 600; color: #0b2b4a; }
+
+        @media (max-width: 600px) {
+            body { padding: 12px 8px; }
+            .header { flex-direction: column; align-items: stretch; padding: 10px 12px; gap: 6px; }
+            .header-left { flex-wrap: wrap; justify-content: flex-start; }
+            .header-right { justify-content: flex-start; }
+            .header-badge { font-size: 0.85rem; padding: 3px 10px; }
+            .month-select { font-size: 0.7rem; min-width: 100px; padding: 3px 12px; padding-right: 26px; }
+            .action-bar { justify-content: flex-start; width: 100%; }
+            .btn, .link-btn { font-size: 0.55rem; padding: 3px 8px; }
+            .dashboard-card { padding: 12px 14px; }
+            .dashboard-card .month-name { font-size: 1.1rem; }
+            .dashboard-card .card-details table { font-size: 0.7rem; }
+            .dashboard-card .card-details thead th, .dashboard-card .card-details tbody td { padding: 5px 6px; }
+            #bg-container-inside { min-width: 100%; }
+            .bg-circle { display: none; }
+            #circle-small, #circle-medium { display: block; }
+            .toast { font-size: 0.7rem; padding: 8px 16px; bottom: 20px; }
+            .modal-content { padding: 18px; margin: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── INFO MODAL ─── -->
+    <div id="infoModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-info-circle"></i> How AUTOFIELD AREA PASSES Works</span>
+                <button class="modal-close" id="closeInfoModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Source:</strong> Field Results per month</p>
+                <p><strong>OVERALL:</strong> Count of all <span class="highlight">VISITED</span> records <span style="color:#6a7e9a;font-size:0.8rem;">(CANCEL results excluded)</span></p>
+                <p><strong>UNIQ:</strong> Removes duplicates of <span class="highlight">CHCODE + MONTH</span> of visit</p>
+                <p><strong>PASSES:</strong> <span class="highlight">OVERALL ÷ UNIQ</span></p>
+                <p><strong>GROUPED BY:</strong> <span class="highlight">AUTOFIELD AREA</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ─── ANIMATED BACKGROUND ─── -->
+    <div id="bg-container">
+        <div id="bg-container-inside">
+            <div id="circle-small" class="bg-circle"></div>
+            <div id="circle-medium" class="bg-circle"></div>
+            <div id="circle-large" class="bg-circle"></div>
+            <div id="circle-xlarge" class="bg-circle"></div>
+            <div id="circle-xxlarge" class="bg-circle"></div>
+        </div>
+    </div>
+
+    <!-- ─── DASHBOARD CONTENT ─── -->
+    <div class="container">
+
+        <!-- ─── HEADER ─── -->
+        <div class="header">
+            <div class="header-left">
+                <div class="header-badge">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="headerMonthTitle">AUTOFIELD AREA</span>
+                </div>
+                <span class="year-badge"><i class="fas fa-th"></i> 2026</span>
+                <select id="monthSelect" class="month-select">
+                    <option value="">-- Loading --</option>
+                </select>
+                <span class="info-badge" id="loadedMonthsBadge"><i class="fas fa-check-circle"></i> 0</span>
+                <button class="info-btn" id="infoBtn" title="How it works"><i class="fas fa-info-circle"></i></button>
+                <!-- LINK BACK TO PLACEMENT VERSION -->
+                <a href="index.html" class="link-btn" title="Go to PIF Passes by Placement">
+                    <i class="fas fa-exchange-alt"></i> PLACEMENT VIEW
+                </a>
+            </div>
+
+            <div class="header-right">
+                <div class="action-bar">
+                    <button class="btn btn-primary" id="loadBtn"><i class="fas fa-folder-open"></i> Browse</button>
+                    <button class="btn btn-success" id="downloadBtn" title="Download current month Excel file"><i class="fas fa-download"></i> Download</button>
+                    <button class="btn btn-primary" id="screenshotBtn" title="Save dashboard as image"><i class="fas fa-camera"></i> Screenshot</button>
+                    <button class="btn btn-outline" id="toggleViewBtn" title="Switch to Overall Passes"><i class="fas fa-table"></i> OVERALL PASSES 2026</button>
+                    <button class="btn btn-outline" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+                </div>
+            </div>
+
+            <div id="errorMsg" class="alert hidden"></div>
+        </div>
+
+        <!-- ─── DASHBOARD CARD ─── -->
+        <div class="dashboard-card-wrapper" id="dashboardContainer">
+            <div class="placeholder-card">
+                <i class="fas fa-spinner fa-pulse"></i>
+                <p>Loading Excel files from repository...</p>
+                <span style="font-size:0.7rem; opacity:0.7;">Looking for JANUARY.xlsx, FEBRUARY.xlsx, etc.</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ─── Global data store ────────────────────────────────────────────────
+        const monthData = {};
+        let activeMonth = null;
+        let currentView = 'monthly'; // 'monthly' or 'overall'
+
+        // ─── DOM refs ──────────────────────────────────────────────────────────
+        const loadBtn = document.getElementById('loadBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const screenshotBtn = document.getElementById('screenshotBtn');
+        const toggleViewBtn = document.getElementById('toggleViewBtn');
+        const infoBtn = document.getElementById('infoBtn');
+        const infoModal = document.getElementById('infoModal');
+        const closeInfoModal = document.getElementById('closeInfoModal');
+        const errorMsg = document.getElementById('errorMsg');
+        const loadedMonthsBadge = document.getElementById('loadedMonthsBadge');
+        const headerMonthTitle = document.getElementById('headerMonthTitle');
+        const dashboardContainer = document.getElementById('dashboardContainer');
+        const monthSelect = document.getElementById('monthSelect');
+        const toast = document.getElementById('toast');
+
+        let toastTimeout = null;
+
+        // ─── Toast notification ──────────────────────────────────────────────
+        function showToast(message, type = 'info') {
+            const icon = type === 'success' ? 'fa-check-circle' :
+                type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+            toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+            toast.className = 'toast show';
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => { toast.className = 'toast'; }, 3500);
+        }
+
+        // ─── Info Modal ──────────────────────────────────────────────────────
+        infoBtn.addEventListener('click', () => { infoModal.classList.remove('hidden'); });
+        closeInfoModal.addEventListener('click', () => { infoModal.classList.add('hidden'); });
+        infoModal.addEventListener('click', (e) => { if (e.target === infoModal) infoModal.classList.add('hidden'); });
+
+        // ─── Helpers ──────────────────────────────────────────────────────────
+        function showError(text) { errorMsg.textContent = text; errorMsg.classList.remove('hidden'); }
+        function hideError() { errorMsg.classList.add('hidden'); }
+
+        function normaliseMonth(name) {
+            return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+        }
+
+        function guessMonthFromFilename(filename) {
+            const name = filename.replace(/\.[^.]+$/, '');
+            const months = ['january', 'february', 'march', 'april', 'may', 'june',
+                'july', 'august', 'september', 'october', 'november', 'december'
+            ];
+            const lower = name.toLowerCase();
+            for (const m of months) { if (lower.includes(m)) return normaliseMonth(m); }
+            return null;
+        }
+
+        function getMonthNumber(month) {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            return months.indexOf(month) + 1;
+        }
+
+        function getCurrentMonthIndex() { return new Date().getMonth(); }
+        function getMonthNameFromIndex(index) {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            return months[index];
+        }
+
+        // ─── Find "AUTOFIELD AREA" column in a row object ────────────────────
+        // Handles variations like "AUTOFIELD AREA", "AUTOFIELD_AREA", "AutoField Area"
+        function findAutofieldKey(rowObj) {
+            const keys = Object.keys(rowObj);
+            for (const k of keys) {
+                const norm = k.toUpperCase().replace(/[\s_\-]+/g, '');
+                if (norm === 'AUTOFIELDAREA') return k;
+            }
+            return null;
+        }
+
+        // ─── Update Header Title ─────────────────────────────────────────────
+        function updateHeaderTitle(month) {
+            if (currentView === 'overall') {
+                headerMonthTitle.textContent = 'AUTOFIELD OVERALL 2026';
+            } else if (month && monthData[month]) {
+                headerMonthTitle.textContent = 'AUTOFIELD • ' + month.toUpperCase();
+            } else {
+                headerMonthTitle.textContent = 'AUTOFIELD AREA';
+            }
+        }
+
+        // ─── Render Monthly Dashboard Card ──────────────────────────────────────────
+        function renderDashboardCard(month) {
+            const data = monthData[month];
+            if (!data) return `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>No data available for this month.</p></div>`;
+
+            const { overallMap, uniqMap } = data;
+            const placements = new Set([...overallMap.keys(), ...uniqMap.keys()]);
+            const sorted = Array.from(placements).sort();
+
+            let totalOverallSum = 0, totalUniqSum = 0;
+            for (const p of sorted) {
+                totalOverallSum += overallMap.get(p) || 0;
+                totalUniqSum += uniqMap.get(p) || 0;
+            }
+            const totalPassesVal = totalUniqSum > 0 ? totalOverallSum / totalUniqSum : 0;
+
+            let tableRows = '';
+            if (sorted.length === 0) {
+                tableRows = `<tr><td colspan="4" class="empty-msg">No autofield areas found</td></tr>`;
+            } else {
+                for (const p of sorted) {
+                    const overall = overallMap.get(p) || 0;
+                    const uniq = uniqMap.get(p) || 0;
+                    const passes = uniq > 0 ? overall / uniq : 0;
+                    tableRows += `<tr><td>${p}</td><td>${overall.toLocaleString()}</td><td>${uniq.toLocaleString()}</td><td>${passes.toFixed(2)}</td></tr>`;
+                }
+                tableRows += `<tr class="total-row"><td><strong>TOTAL</strong></td><td>${totalOverallSum.toLocaleString()}</td><td>${totalUniqSum.toLocaleString()}</td><td>${totalPassesVal.toFixed(2)}</td></tr>`;
+            }
+
+            return `
+                <div class="dashboard-card" id="dashboardCard">
+                    <div class="card-header">
+                        <span class="month-name">
+                            ${month.toUpperCase()}
+                            <span class="month-number">${String(getMonthNumber(month)).padStart(2, '0')}</span>
+                        </span>
+                    </div>
+                    <div class="card-details">
+                        <table>
+                            <thead><tr><th>AUTOFIELD AREA</th><th>OVERALL</th><th>UNIQ</th><th>PASSES</th></tr></thead>
+                            <tbody>${tableRows}</tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ─── Render Overall Passes Table (Matrix) ─────────────────────────────
+        function renderOverallPassesTable() {
+            const months = Object.keys(monthData);
+            if (months.length === 0) {
+                dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>No data available.</p></div>`;
+                return;
+            }
+
+            months.sort((a, b) => getMonthNumber(a) - getMonthNumber(b));
+
+            // Get all unique autofield areas across all loaded months
+            const allAreas = new Set();
+            months.forEach(m => {
+                const { overallMap, uniqMap } = monthData[m];
+                [...overallMap.keys(), ...uniqMap.keys()].forEach(p => allAreas.add(p));
+            });
+            const sortedAreas = Array.from(allAreas).sort();
+
+            // Build Table Header
+            let thead = '<tr><th>AUTOFIELD AREA</th>';
+            months.forEach(m => {
+                thead += `<th>${m.substring(0, 3).toUpperCase()}</th>`;
+            });
+            thead += '<th>OVERALL PASSES</th></tr>';
+
+            // Build Table Body
+            let tbody = '';
+            sortedAreas.forEach(p => {
+                let row = `<td><strong>${p}</strong></td>`;
+                let placementOverall = 0;
+                let placementUniq = 0;
+
+                months.forEach(m => {
+                    const overall = monthData[m].overallMap.get(p) || 0;
+                    const uniq = monthData[m].uniqMap.get(p) || 0;
+                    placementOverall += overall;
+                    placementUniq += uniq;
+
+                    const passes = uniq > 0 ? (overall / uniq) : 0;
+                    row += `<td>${passes > 0 ? passes.toFixed(2) : '-'}</td>`;
+                });
+
+                const placementPasses = placementUniq > 0 ? (placementOverall / placementUniq) : 0;
+                row += `<td style="font-weight:bold; background: #f7faff;">${placementPasses > 0 ? placementPasses.toFixed(2) : '-'}</td>`;
+                tbody += `<tr>${row}</tr>`;
+            });
+
+            // Build Table Footer (Monthly Totals)
+            let tfoot = '<tr class="total-row"><td><strong>MONTHLY TOTAL</strong></td>';
+            let grandOverall = 0;
+            let grandUniq = 0;
+
+            months.forEach(m => {
+                let monthOverall = 0;
+                let monthUniq = 0;
+                monthData[m].overallMap.forEach(v => monthOverall += v);
+                monthData[m].uniqMap.forEach(v => monthUniq += v);
+                grandOverall += monthOverall;
+                grandUniq += monthUniq;
+
+                const monthPasses = monthUniq > 0 ? (monthOverall / monthUniq) : 0;
+                tfoot += `<td>${monthPasses > 0 ? monthPasses.toFixed(2) : '-'}</td>`;
+            });
+
+            const grandPasses = grandUniq > 0 ? (grandOverall / grandUniq) : 0;
+            tfoot += `<td style="font-weight:bold; background: #e9eff6;">${grandPasses > 0 ? grandPasses.toFixed(2) : '-'}</td></tr>`;
+
+            dashboardContainer.innerHTML = `
+                <div class="dashboard-card" id="dashboardCard">
+                    <div class="card-header">
+                        <span class="month-name">
+                            AUTOFIELD OVERALL PASSES 2026 <span style="font-size:0.8rem; font-weight:normal; color:#6a7e9a; margin-left:10px;">(Passes = OVERALL ÷ UNIQ)</span>
+                        </span>
+                    </div>
+                    <div class="card-details" style="overflow-x: auto;">
+                        <table class="matrix-table">
+                            <thead>${thead}</thead>
+                            <tbody>${tbody}</tbody>
+                            <tfoot>${tfoot}</tfoot>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ─── Display selected month ─────────────────────────────────────────
+        function displayMonth(month) {
+            if (currentView === 'overall') return;
+
+            if (!month || !monthData[month]) {
+                dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>Select a month from the dropdown to view data.</p></div>`;
+                updateHeaderTitle(null);
+                return;
+            }
+
+            activeMonth = month;
+            dashboardContainer.innerHTML = renderDashboardCard(month);
+            updateHeaderTitle(month);
+            monthSelect.value = month;
+        }
+
+        // ─── Populate Dropdown & Auto-select ────────────────────────────────
+        function populateDropdown() {
+            const loadedMonths = Object.keys(monthData);
+            monthSelect.innerHTML = '<option value="">-- Select --</option>';
+
+            if (loadedMonths.length === 0) {
+                monthSelect.innerHTML = '<option value="">-- No months --</option>';
+                return;
+            }
+
+            loadedMonths.sort((a, b) => getMonthNumber(a) - getMonthNumber(b));
+            for (const m of loadedMonths) {
+                const option = document.createElement('option');
+                option.value = m;
+                option.textContent = m;
+                monthSelect.appendChild(option);
+            }
+
+            if (currentView === 'overall') return;
+
+            const currentMonthIndex = getCurrentMonthIndex();
+            const currentMonthName = getMonthNameFromIndex(currentMonthIndex);
+            let selectedMonth = null;
+
+            if (monthData[currentMonthName]) {
+                selectedMonth = currentMonthName;
+            } else {
+                for (let i = currentMonthIndex - 1; i >= 0; i--) {
+                    const monthName = getMonthNameFromIndex(i);
+                    if (monthData[monthName]) { selectedMonth = monthName; break; }
+                }
+                if (!selectedMonth && loadedMonths.length > 0) selectedMonth = loadedMonths[0];
+            }
+
+            if (selectedMonth) {
+                monthSelect.value = selectedMonth;
+                displayMonth(selectedMonth);
+            } else if (loadedMonths.length > 0) {
+                monthSelect.value = loadedMonths[0];
+                displayMonth(loadedMonths[0]);
+            }
+        }
+
+        function updateLoadedBadge() {
+            const loaded = Object.keys(monthData).length;
+            loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${loaded}`;
+        }
+
+        // ─── process file data from ArrayBuffer ─────────────────────────────
+        function processFileData(fileData, fileName) {
+            return new Promise((resolve, reject) => {
+                try {
+                    const workbook = XLSX.read(fileData, { type: 'array' });
+                    const sheetNames = workbook.SheetNames;
+                    const allSheetName = sheetNames.find(s => s.toUpperCase() === 'ALL');
+                    const uniqSheetName = sheetNames.find(s => s.toUpperCase() === 'UNIQ');
+
+                    if (!allSheetName || !uniqSheetName) {
+                        reject(new Error(`Sheet "ALL" or "UNIQ" missing in ${fileName}`));
+                        return;
+                    }
+
+                    const allSheet = workbook.Sheets[allSheetName];
+                    const allJson = XLSX.utils.sheet_to_json(allSheet);
+                    if (allJson.length === 0) {
+                        reject(new Error(`Sheet "ALL" is empty in ${fileName}`));
+                        return;
+                    }
+
+                    const uniqSheet = workbook.Sheets[uniqSheetName];
+                    const uniqJson = XLSX.utils.sheet_to_json(uniqSheet);
+                    if (uniqJson.length === 0) {
+                        reject(new Error(`Sheet "UNIQ" is empty in ${fileName}`));
+                        return;
+                    }
+
+                    // Find AUTOFIELD AREA column (case-insensitive, space/underscore tolerant)
+                    const allKey = findAutofieldKey(allJson[0]);
+                    const uniqKey = findAutofieldKey(uniqJson[0]);
+
+                    if (!allKey || !uniqKey) {
+                        reject(new Error(`Column "AUTOFIELD AREA" not found in ${fileName}`));
+                        return;
+                    }
+
+                    const overallMap = new Map();
+                    for (const row of allJson) {
+                        const area = String(row[allKey] || '').trim();
+                        if (area) overallMap.set(area, (overallMap.get(area) || 0) + 1);
+                    }
+
+                    const uniqMap = new Map();
+                    for (const row of uniqJson) {
+                        const area = String(row[uniqKey] || '').trim();
+                        if (area) uniqMap.set(area, (uniqMap.get(area) || 0) + 1);
+                    }
+
+                    let month = guessMonthFromFilename(fileName);
+                    if (!month) {
+                        reject(new Error(`Could not detect month from filename: ${fileName}`));
+                        return;
+                    }
+                    resolve({ month, overallMap, uniqMap });
+                } catch (err) { reject(err); }
+            });
+        }
+
+        // ─── Fetch Excel files from the repository ──────────────────────────
+        async function fetchExcelFilesFromRepo() {
+            hideError();
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const allPatterns = [];
+
+            for (const m of monthNames) allPatterns.push(`${m}.xlsx`);
+            for (const m of monthNames) allPatterns.push(`${m.toLowerCase()}.xlsx`);
+            for (const m of monthNames) allPatterns.push(`${m.toUpperCase()}.xlsx`);
+            for (const a of monthAbbr) {
+                allPatterns.push(`${a}.xlsx`); allPatterns.push(`${a.toLowerCase()}.xlsx`); allPatterns.push(`${a.toUpperCase()}.xlsx`);
+            }
+            for (const m of monthNames) {
+                allPatterns.push(`${m}_data.xlsx`); allPatterns.push(`${m.toUpperCase()}_data.xlsx`); allPatterns.push(`${m.toLowerCase()}_data.xlsx`);
+            }
+            for (const m of monthNames) {
+                allPatterns.push(`${m} 2026.xlsx`); allPatterns.push(`${m.toUpperCase()} 2026.xlsx`);
+            }
+            for (const m of monthNames) {
+                allPatterns.push(m); allPatterns.push(m.toUpperCase()); allPatterns.push(m.toLowerCase());
+            }
+
+            const uniquePatterns = [...new Set(allPatterns)];
+            let loadedCount = 0;
+
+            dashboardContainer.innerHTML = `
+                <div class="placeholder-card">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                    <p>Loading Excel files from repository...</p>
+                    <span style="font-size:0.7rem; opacity:0.7;">Scanning for months (JANUARY.xlsx, FEBRUARY.xlsx, ...)</span>
+                </div>
+            `;
+
+            for (const fileName of uniquePatterns) {
+                try {
+                    const response = await fetch(fileName);
+                    if (!response.ok) continue;
+                    const fileData = new Uint8Array(await response.arrayBuffer());
+                    const result = await processFileData(fileData, fileName);
+                    const { month, overallMap, uniqMap } = result;
+                    if (!monthData[month]) {
+                        monthData[month] = { overallMap, uniqMap };
+                        loadedCount++;
+                        console.log(`✅ Loaded Autofield Area: ${month} from ${fileName}`);
+                    }
+                } catch (err) { continue; }
+            }
+
+            if (loadedCount > 0) {
+                populateDropdown();
+                if (currentView === 'overall') renderOverallPassesTable();
+            } else {
+                dashboardContainer.innerHTML = `
+                    <div class="placeholder-card">
+                        <i class="fas fa-file-excel"></i>
+                        <p>No Excel files found in the repository.</p>
+                        <span style="font-size:0.7rem; opacity:0.7;">
+                            Make sure your monthly Excel files (e.g., JANUARY.xlsx, FEBRUARY.xlsx) are in the same folder.<br>
+                            <strong>Required sheet:</strong> ALL &amp; UNIQ (with AUTOFIELD AREA column)
+                        </span>
+                    </div>
+                `;
+                loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
+                monthSelect.innerHTML = '<option value="">-- No months --</option>';
+                updateHeaderTitle(null);
+            }
+
+            updateLoadedBadge();
+            if (loadedCount === 0) showError('No Excel files found. Please upload files or use the Browse button.');
+        }
+
+        // ─── Manual file selection (fallback) ──────────────────────────────
+        function manualFileSelect() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.multiple = true;
+            fileInput.accept = '.xlsx,.xls';
+            fileInput.style.display = 'none';
+
+            fileInput.addEventListener('change', async function() {
+                const files = this.files;
+                if (files.length === 0) return;
+
+                for (const key in monthData) delete monthData[key];
+                activeMonth = null;
+
+                let loadedCount = 0;
+                for (const file of files) {
+                    try {
+                        const reader = new FileReader();
+                        const fileData = await new Promise((resolve, reject) => {
+                            reader.onload = (e) => resolve(new Uint8Array(e.target.result));
+                            reader.onerror = reject;
+                            reader.readAsArrayBuffer(file);
+                        });
+                        const result = await processFileData(fileData, file.name);
+                        const { month, overallMap, uniqMap } = result;
+                        if (!monthData[month]) {
+                            monthData[month] = { overallMap, uniqMap };
+                            loadedCount++;
+                        }
+                    } catch (err) { showError(`Error processing ${file.name}: ${err.message}`); }
+                }
+
+                if (loadedCount > 0) {
+                    populateDropdown();
+                    if (currentView === 'overall') renderOverallPassesTable();
+                } else {
+                    dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-exclamation-triangle"></i><p>No valid months loaded. Please check file names and content.</p></div>`;
+                    loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
+                    updateHeaderTitle(null);
+                }
+                this.remove();
+            });
+
+            document.body.appendChild(fileInput);
+            fileInput.click();
+        }
+
+        // ─── Screenshot function ─────────────────────────────────────────────
+        async function takeScreenshot() {
+            const card = document.getElementById('dashboardCard');
+            if (!card) { showToast('No dashboard card to capture. Please load data first.', 'error'); return; }
+
+            try {
+                showToast('Capturing screenshot...', 'info');
+                const canvas = await html2canvas(card, { scale: 2, backgroundColor: '#ffffff', allowTaint: true, useCORS: true, logging: false });
+                const link = document.createElement('a');
+                link.download = `AUTOFIELD_PASSES_${currentView === 'overall' ? 'OVERALL_2026' : (activeMonth || 'DASHBOARD')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('Screenshot saved successfully!', 'success');
+            } catch (err) {
+                console.error('Screenshot error:', err);
+                showToast('Failed to capture screenshot. Please try again.', 'error');
+            }
+        }
+
+        // ─── Download Excel file ─────────────────────────────────────────────
+        function downloadExcelFile() {
+            if (currentView === 'overall') {
+                showToast('Download is only available in Monthly View.', 'error');
+                return;
+            }
+            if (!activeMonth) { showToast('No month selected. Please select a month first.', 'error'); return; }
+
+            const monthName = activeMonth;
+            const fileNames = [`${monthName.toUpperCase()}.xlsx`, `${monthName}.xlsx`, `${monthName.toLowerCase()}.xlsx`, `${monthName}_data.xlsx`, `${monthName.toUpperCase()}_data.xlsx`];
+            const uniqueFileNames = [...new Set(fileNames)];
+
+            async function attemptDownload() {
+                for (const fileName of uniqueFileNames) {
+                    try {
+                        const response = await fetch(fileName);
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.download = fileName;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+                            showToast(`Downloaded ${fileName}`, 'success');
+                            return;
+                        }
+                    } catch (err) { }
+                }
+                showToast(`Could not find Excel file for ${monthName}. Make sure it's in the repository.`, 'error');
+            }
+            attemptDownload();
+        }
+
+        // ─── Event Listeners ──────────────────────────────────────────────────
+
+        loadBtn.addEventListener('click', manualFileSelect);
+
+        toggleViewBtn.addEventListener('click', () => {
+            currentView = currentView === 'monthly' ? 'overall' : 'monthly';
+            if (currentView === 'overall') {
+                toggleViewBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> Monthly View';
+                toggleViewBtn.classList.remove('btn-outline');
+                toggleViewBtn.classList.add('btn-primary');
+                monthSelect.disabled = true;
+                renderOverallPassesTable();
+                updateHeaderTitle(null);
+            } else {
+                toggleViewBtn.innerHTML = '<i class="fas fa-table"></i> OVERALL PASSES 2026';
+                toggleViewBtn.classList.remove('btn-primary');
+                toggleViewBtn.classList.add('btn-outline');
+                monthSelect.disabled = false;
+                if (activeMonth && monthData[activeMonth]) {
+                    displayMonth(activeMonth);
+                } else {
+                    const months = Object.keys(monthData).sort((a,b) => getMonthNumber(a) - getMonthNumber(b));
+                    if (months.length > 0) displayMonth(months[0]);
+                }
+            }
+        });
+
+        monthSelect.addEventListener('change', function() {
+            const month = this.value;
+            if (month && monthData[month]) {
+                displayMonth(month);
+            } else {
+                dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-file-excel"></i><p>Select a month from the dropdown to view data.</p></div>`;
+                updateHeaderTitle(null);
+            }
+        });
+
+        resetBtn.addEventListener('click', async function() {
+            for (const key in monthData) delete monthData[key];
+            activeMonth = null;
+            loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
+            hideError();
+            dashboardContainer.innerHTML = `<div class="placeholder-card"><i class="fas fa-spinner fa-pulse"></i><p>Loading Excel files from repository...</p></div>`;
+            updateHeaderTitle(null);
+            monthSelect.innerHTML = '<option value="">-- Loading --</option>';
+            setTimeout(fetchExcelFilesFromRepo, 300);
+        });
+
+        screenshotBtn.addEventListener('click', takeScreenshot);
+        downloadBtn.addEventListener('click', downloadExcelFile);
+
+        // ─── Initialise ──────────────────────────────────────────────────────
+        dashboardContainer.innerHTML = `
+            <div class="placeholder-card">
+                <i class="fas fa-spinner fa-pulse"></i>
+                <p>Loading Excel files from repository...</p>
+                <span style="font-size:0.7rem; opacity:0.7;">Looking for JANUARY.xlsx, FEBRUARY.xlsx, etc.</span>
+            </div>
+        `;
+        loadedMonthsBadge.innerHTML = `<i class="fas fa-check-circle"></i> 0`;
+        updateHeaderTitle(null);
+        monthSelect.innerHTML = '<option value="">-- Loading --</option>';
+
+        setTimeout(fetchExcelFilesFromRepo, 200);
+    </script>
+</body>
+</html>
